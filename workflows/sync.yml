@@ -1,0 +1,23 @@
+name: Sync master with upstream
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Sync master with NixOS/nixpkgs
+        run: |
+          git remote add upstream https://github.com/NixOS/nixpkgs.git
+          git fetch upstream master
+          git checkout master
+          git reset --hard upstream/master  # force reset, not merge
+          git push origin master --force-with-lease
