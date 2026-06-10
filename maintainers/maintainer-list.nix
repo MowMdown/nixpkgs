@@ -18610,6 +18610,12 @@
     matrix = "@motiejus:jakstys.lt";
     name = "Motiejus Jakštys";
   };
+  mowmdown = {
+    email = "wallace.ryan10@gmail.com";
+    github = "MowMdown";
+    githubId = 3111696;
+    name = "Ryan Wallace";
+  };
   mpcsh = {
     email = "m@mpc.sh";
     github = "mpcsh";
