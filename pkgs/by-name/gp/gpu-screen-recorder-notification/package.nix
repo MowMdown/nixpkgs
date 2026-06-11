@@ -17,11 +17,13 @@
   freetype,
   gitUpdater,
 }:
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpu-screen-recorder-notification";
   version = "1.3.3";
   strictDeps = true;
   __structuredAttrs = true;
+
   src = fetchgit {
     url = "https://repo.dec05eba.com/gpu-screen-recorder-notification";
     tag = finalAttrs.version;
@@ -32,7 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     meson
     ninja
-    wayland-scanner
   ];
 
   buildInputs = [
@@ -42,21 +43,11 @@ stdenv.mkDerivation (finalAttrs: {
     libxrandr
     libxrender
     libxext
-    wayland
     pango
     freetype
+    wayland
+    wayland-scanner
   ];
-
-  postPatch = ''
-      find . -name "meson.build" | xargs grep -l "wayland-scanner" | while read f; do
-        substituteInPlace "$f" \
-          --replace-fail \
-            "wayland_scanner = dependency('wayland-scanner', native: true)
-    wayland_scanner_path = wayland_scanner.get_variable(pkgconfig: 'wayland_scanner')
-    wayland_scanner_prog = find_program(wayland_scanner_path, native: true)" \
-            "wayland_scanner_prog = find_program('wayland-scanner', native: true)"
-      done
-  '';
 
   passthru.updateScript = gitUpdater { };
 
@@ -65,9 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://git.dec05eba.com/gpu-screen-recorder-notification/about/";
     license = lib.licenses.gpl3Only;
     mainProgram = "gpu-screen-recorder-notification";
-    maintainers = with lib.maintainers; [
-      mowmdown
-    ];
+    maintainers = with lib.maintainers; [ mowmdown ];
     platforms = lib.platforms.linux;
   };
 })
